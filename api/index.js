@@ -51,8 +51,6 @@ async function sendRawLogToRTDB(log) {
         await db.child(ts).set({
             machine: 1,
             ...log
-            // [ts]: {
-            // }
         });
         console.log(`Saved data ${ts} to RTDB @${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`)
     } catch (error) {
@@ -63,7 +61,7 @@ async function sendRawLogToRTDB(log) {
 
 app.get("/", async (req, res) => {
     try {
-        // const data = await db.
+        const data = await db.get()
         res.json(data);
         console.log(`Sent data to client @${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`)
     } catch (error) {
