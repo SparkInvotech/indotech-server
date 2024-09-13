@@ -64,65 +64,8 @@ async function sendRawLogToRTDB(log) {
 
 app.get("/", async (req, res) => {
   try {
-    // const data = await db.get()
-    const dbData = {
-      "2024-08-24 11:11:11": {
-        airFilterVacuumPressure: 29.8,
-        currentSensor: 10,
-        dischargePressureSensor: 12.5,
-        drainValvePressureOutlet: 0.5,
-        machine: 1,
-        oilPressureInlet: 30.2,
-        oilPressureOutlet: 28.9,
-        oilTemperatureSensor: 150,
-        voltageSensor: 120,
-      },
-      "2024-08-24 12:30:38": {
-        airFilterVacuumPressure: 700,
-        currentSensor: 56,
-        dischargePressureSensor: 577,
-        drainValvePressureOutlet: 693,
-        machine: 1,
-        oilPressureInlet: 15005,
-        oilPressureOutlet: 5090,
-        oilTemperatureSensor: 53,
-        voltageSensor: 156,
-      },
-      "2024-08-24 12:30:52": {
-        airFilterVacuumPressure: 181,
-        currentSensor: 32,
-        dischargePressureSensor: 522,
-        drainValvePressureOutlet: 478,
-        machine: 1,
-        oilPressureInlet: 5834,
-        oilPressureOutlet: 6100,
-        oilTemperatureSensor: 134,
-        voltageSensor: 207,
-      },
-      "2024-08-24 12:30:54": {
-        airFilterVacuumPressure: 1483,
-        currentSensor: 24,
-        dischargePressureSensor: 680,
-        drainValvePressureOutlet: 1538,
-        machine: 1,
-        oilPressureInlet: 9196,
-        oilPressureOutlet: 13852,
-        oilTemperatureSensor: 87,
-        voltageSensor: 429,
-      },
-    };
-    const OTM = 115;
-    const lastStamp = data[Object.keys(data).at(-1)];
-    const data = {
-        timeseries: dbData,
-        airFilterCondition: lastStamp.airFilterVacuumPressure <= 0.8? "GOOD": "BAD",
-        oilFilterCondition: lastStamp.oilPressureInlet - lastStamp.oilPressureOutlet >= 0.6? "BAD": "GOOD",
-        oilTemperatureCondition: lastStamp.oilTemperatureSensor >= OTM? "HIGH": "NORMAL",
-    }
+    const data = (await db.get()).toJSON();
     res.json(data);
-    console.log(
-      `Sent data to client @${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`,
-    );
   } catch (error) {
     console.log("🚀 ~ app.get ~ error:", error);
     res.status(500).json({ error: "Server error in fetching data" });
